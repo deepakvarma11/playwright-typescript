@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+
+  "extends": [
+    "eslint:recommended",
+    "plugins:@typescript-eslint/recommended",
+    "plugins:playwright/recommended",
+    "prettier"
+  ],
+  "env": {
+    "node": true,
+    "es6": true,
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "String": {
+            "message": "Use string instead",
+            "fixWith": "string"
+          },
+          "Number": {
+            "message": "Use number instead",
+            "fixWith": "number"
+          }
+        },
+        "extendDefaults": false
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "*dist/",
+    "node_modules/",
+    "playwright-report/",
+    "e2e/test-results/"
+  ]
+}
