@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { Env } from "../../frameworkConfig/env";
 
 test("Test Add employee", async ({ page }) => {
-  await page.goto(Env.URL);
+  await page.goto(Env.URL); 
   await page
     .getByRole("textbox", { name: "Username" })
     .fill(Env.LOGIN_USERNAME);
