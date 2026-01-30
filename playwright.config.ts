@@ -46,6 +46,11 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    headless: false,
+    viewport: null,            // let the browser window size be used
+    launchOptions: {
+      args: ['--start-fullscreen'] // or ['--start-maximized', '--window-size=1920,1080']
+    }
   },
 
   /* Configure projects for major browsers */
