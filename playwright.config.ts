@@ -7,11 +7,6 @@ if (process.env.ENVIRONMENT) {
   console.log(`Running on the ${process.env.ENVIRONMENT} environment`);
   console.log("Loading env file:", envPath);
   config({ path: envPath, override: true });
-  console.log("Loaded env vars:", {
-    URL: process.env.URL,
-    LOGIN_USERNAME: process.env.LOGIN_USERNAME,
-    LOGIN_PASSWORD: process.env.LOGIN_PASSWORD,
-  });
 } else {
   config();
 }
@@ -28,7 +23,7 @@ if (process.env.ENVIRONMENT) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: "./e2e/tests/addEmployee",
+  testDir: "./e2e/tests/login",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

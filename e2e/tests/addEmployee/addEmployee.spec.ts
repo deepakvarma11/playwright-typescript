@@ -1,8 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { Env } from "../../frameworkConfig/env";
-import { LoginPage} from "../../pages/login.page";
-import { HomePage } from "../../pages/home.page";
-import { PimPage } from "../../pages/pim.page";
 import { Pages } from "../../pages/pages";
 
 test("Verify if employee exists", async ({ page }) => {
@@ -10,7 +7,8 @@ test("Verify if employee exists", async ({ page }) => {
   const loginPage = pages.loginPage;
   
   await page.goto(Env.URL); 
-  const homePage = await loginPage.login(Env.LOGIN_USERNAME, Env.LOGIN_PASSWORD);
+  await loginPage.login(Env.LOGIN_USERNAME, Env.LOGIN_PASSWORD);
+  const homePage = pages.homePage;
   await homePage.navigateToPIM();
   const pimPage = pages.pimPage;
 

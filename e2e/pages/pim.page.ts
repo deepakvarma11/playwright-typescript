@@ -15,7 +15,8 @@ export class PimPage extends BasePage {
   private readonly saveButton =  this.page.getByRole('button', { name: 'Save' });
   private readonly successMessage =  this.page.getByText(/Successfully Saved/i);
 
-  private employeeCheckbox = `//div[normalize-space(text())=$EMPLOYEEID]/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
+
+  private readonly employeeCheckbox = `//div[normalize-space(text())=$EMPLOYEEID]/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
   private readonly deleteButton = this.page.getByRole('button', { name: '' });
   private readonly confirmDeleteButton = this.page.getByRole('button', { name: ' Yes, Delete' });
 

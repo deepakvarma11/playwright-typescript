@@ -10,6 +10,10 @@ export class BasePage {
         await this.page.waitForLoadState('networkidle');
     }
 
+    async gotoUrl(url: string){
+        await this.page.goto(url);
+    }
+
     async waitForTimeout(time: number){
         await this.page.waitForTimeout(time);
     }
