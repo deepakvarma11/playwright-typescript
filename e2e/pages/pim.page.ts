@@ -34,9 +34,9 @@ export class PimPage extends BasePage {
   async addEmployee(){
       await this.addEmployeeButton.click();
       await this.waitForTimeout(3000);
-      await this.firstName.fill('iaydgfaid');
-      await this.middleName.fill('daikuhdai');
-      await this.lastName.fill('daskduh');
+      await this.firstName.fill('iaydgfaid', { timeout: 5000 });
+      await this.middleName.fill('daikuhdai', { timeout: 5000 });
+      await this.lastName.fill('daskduh', { timeout: 5000 });
       await this.employeeid.click();
       await this.employeeid.fill('0888');
       await this.saveButton.click();
@@ -53,7 +53,7 @@ export class PimPage extends BasePage {
   async isNoRecordsFoundVisible(): Promise<boolean> {
     // this.networkIdle();
     await this.waitForTimeout(2000);
-    return await this.noRecordsFound.isVisible();
+    return await this.noRecordsFound.isVisible({ timeout: 5000 });
   }
 
   private async checkboxForEmployee(employeeId: string): Promise<Locator>{
