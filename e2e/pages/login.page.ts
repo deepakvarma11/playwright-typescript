@@ -19,7 +19,8 @@ export class LoginPage extends BasePage {
         await this.usernameInput.fill(username);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
-        // await this.waitForTimeout(6000);
+        await this.networkIdle();
+        await this.waitForTimeout(6000);
         await this.page.waitForURL(/dashboard/, { timeout: 10000 }).catch(() => {});
     }
 

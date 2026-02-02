@@ -1,4 +1,5 @@
 import { BasePage } from "./base.page";
+import { Locator } from "@playwright/test";
 
 export class PimPage extends BasePage {
 
@@ -16,7 +17,7 @@ export class PimPage extends BasePage {
   private readonly successMessage =  this.page.getByText(/Successfully Saved/i);
 
 
-  private readonly employeeCheckbox = `//div[normalize-space(text())=$EMPLOYEEID]/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
+  private readonly employeeCheckbox = `//div[normalize-space(text())=$REPLACED]/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
   private readonly deleteButton = this.page.getByRole('button', { name: '' });
   private readonly confirmDeleteButton = this.page.getByRole('button', { name: ' Yes, Delete' });
 
@@ -55,15 +56,16 @@ export class PimPage extends BasePage {
     return await this.noRecordsFound.isVisible();
   }
 
-  private checkboxForEmployee(employeeId: string) {
-    const chckBox = this.employeeCheckbox.replace('$EMPLOYEEID', employeeId);
+  private checkboxForEmployee(employeeId: string): Promise<Locator>{
+    const chckBox = this.getReplaceLocator(this.employeeCheckbox, employeeId);
+    // const chckBox = this.employeeCheckbox.replace('$EMPLOYEEID', employeeId);
     // const xpath = `//div[normalize-space(text())='${employeeId}']/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
-    return this.page.locator(chckBox);
+    return chckBox;
   }
 
   async removeEmployeeById(employeeId: string) {
     await this.searchEmployeeById(employeeId);
-    const checkbox = this.checkboxForEmployee(employeeId);
+    const checkbox = await this.checkboxForEmployee(employeeId);
     await checkbox.waitFor({ state: 'visible' });
     await checkbox.click();
     await this.deleteButton.click();
@@ -71,15 +73,4 @@ export class PimPage extends BasePage {
     await this.page.getByText('Info', { exact: true }).waitFor({ state: 'visible' });
   }
 
-  // async removeEmployeeById(employeeId: string) {
-  //     await this.searchEmployeeById(employeeId);
-  //     await this.page
-  //         .locator(
-  //           ".oxd-table-card-cell-checkbox > .oxd-checkbox-wrapper > label > .oxd-checkbox-input > .oxd-icon",
-  //         )
-  //     .click();
-  //     await this.page.getByRole("button", { name: "" }).click();
-  //     await this.page.getByRole("button", { name: " Yes, Delete" }).click();
-  //     await this.page.getByText("Info", { exact: true }).isVisible();
-  // }
 }
