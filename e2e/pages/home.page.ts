@@ -7,8 +7,6 @@ export class HomePage extends BasePage {
 
     async navigateToPIM() {
         await this.pim.click();
-        await this.networkIdle();
-        await this.waitForTimeout(6000);
     }
     
 
