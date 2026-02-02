@@ -23,8 +23,8 @@ if (process.env.ENVIRONMENT) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: "./e2e/tests/",
-  /* Run tests in files in parallel */
+  testDir: "./e2e/tests/addEmployee",
+  /* Run tests in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
@@ -44,7 +44,9 @@ export default defineConfig({
     viewport: null,            // let the browser window size be used
     launchOptions: {
       args: ['--start-fullscreen'] // or ['--start-maximized', '--window-size=1920,1080']
-    }
+    },
+    screenshot: 'only-on-failure',   // or 'on' to always capture
+    video: 'retain-on-failure',      // optional: record video on failure
   },
 
   /* Configure projects for major browsers */

@@ -56,8 +56,8 @@ export class PimPage extends BasePage {
     return await this.noRecordsFound.isVisible();
   }
 
-  private checkboxForEmployee(employeeId: string): Promise<Locator>{
-    const chckBox = this.getReplaceLocator(this.employeeCheckbox, employeeId);
+  private async checkboxForEmployee(employeeId: string): Promise<Locator>{
+    const chckBox = await this.getReplaceLocator(this.employeeCheckbox, employeeId);
     // const chckBox = this.employeeCheckbox.replace('$EMPLOYEEID', employeeId);
     // const xpath = `//div[normalize-space(text())='${employeeId}']/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
     return chckBox;
