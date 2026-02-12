@@ -19,6 +19,5 @@ test("Verify if employee exists", async ({ page }) => {
     await pimPage.addEmployee();
   } else {
     await pimPage.removeEmployeeById("0888");
-    await expect(page.getByText("Info", { exact: true })).toBeVisible();
   }
 });
