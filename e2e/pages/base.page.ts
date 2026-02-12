@@ -5,10 +5,6 @@ export class BasePage {
     // this.page = page;
   }
 
-  async networkIdle() {
-    await this.page.waitForLoadState("networkidle");
-  }
-
   async gotoUrl(url: string) {
     await this.page.goto(url);
   }
