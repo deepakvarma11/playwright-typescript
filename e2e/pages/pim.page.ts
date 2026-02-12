@@ -1,3 +1,4 @@
+import { time } from "console";
 import { BasePage } from "./base.page";
 import { Locator } from "@playwright/test";
 
@@ -9,9 +10,7 @@ export class PimPage extends BasePage {
   private readonly searchButton = this.page.getByRole("button", {
     name: "Search",
   });
-  private readonly noRecordsFound = this.page.locator(
-    '//span[text()="No Records Found"]',
-  );
+  private readonly noRecordsFound = this.page.locator('span').filter({ hasText: 'No Records Found' });
   private readonly addEmployeeButton = this.page.getByRole("link", {
     name: "Add Employee",
   });
@@ -45,14 +44,15 @@ export class PimPage extends BasePage {
 
   async addEmployee() {
     await this.addEmployeeButton.click();
-    await this.firstName.waitFor({ state: "visible" });
+    await this.page.waitForLoadState("domcontentloaded");
+    await this.firstName.waitFor({ state: "visible" , timeout: 5000});
     await this.firstName.fill("iaydgfaid");
     await this.middleName.fill("daikuhdai");
     await this.lastName.fill("daskduh");
     await this.employeeid.click();
     await this.employeeid.fill("0888");
     await this.saveButton.click();
-    await this.successMessage.isVisible();
+    await this.page.waitForURL(/viewPersonalDetails/, { timeout: 10000 }).catch(() => {});
   }
 
   async searchEmployeeById(employeeId: string) {
@@ -60,11 +60,12 @@ export class PimPage extends BasePage {
     await this.employeeIdInput.click();
     await this.employeeIdInput.fill(employeeId);
     await this.searchButton.click();
+    // await this.searchButton.dblclick({ delay: 100 });
     await this.page.waitForLoadState("domcontentloaded");
   }
 
   async isNoRecordsFoundVisible(): Promise<boolean> {
-    await this.page.waitForLoadState("domcontentloaded");
+    await this.page.waitForTimeout(5000);
     return await this.noRecordsFound.isVisible({ timeout: 5000 });
   }
 
