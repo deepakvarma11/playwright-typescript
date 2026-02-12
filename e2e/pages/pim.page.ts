@@ -45,7 +45,7 @@ export class PimPage extends BasePage {
 
   async addEmployee() {
     await this.addEmployeeButton.click();
-    await this.firstName.waitFor({ state: "visible", timeout: 10000 });
+    await this.firstName.waitFor({ state: "visible" });
     await this.firstName.fill("iaydgfaid", { timeout: 5000 });
     await this.middleName.fill("daikuhdai", { timeout: 5000 });
     await this.lastName.fill("daskduh", { timeout: 5000 });
@@ -56,7 +56,7 @@ export class PimPage extends BasePage {
   }
 
   async searchEmployeeById(employeeId: string) {
-    await this.employeeIdInput.waitFor({ state: "visible", timeout: 10000 });
+    await this.employeeIdInput.waitFor({ state: "visible" });
     await this.employeeIdInput.click();
     await this.employeeIdInput.fill(employeeId);
     await this.searchButton.click();
