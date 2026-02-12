@@ -13,7 +13,7 @@ test("Verify if employee exists", async ({ page }) => {
   const pimPage = pages.pimPage;
 
   await pimPage.searchEmployeeById("0888");
-  console.log(await pimPage.isNoRecordsFoundVisible());
+  console.log("No records found:", await pimPage.isNoRecordsFoundVisible());
 
   if (await pimPage.isNoRecordsFoundVisible()) {
     await pimPage.addEmployee();
