@@ -12,15 +12,15 @@ test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
     await homePage.navigateToPIM();
   });
 
-  await pimPage.searchEmployeeById("0888");
-
   const employee = EmployeeFactory.create();
   console.log(employee);
+
+  await pimPage.searchEmployeeById(employee.employeeId);
 
   if (await pimPage.isNoRecordsFoundVisible()) {
     await pimPage.addEmployeeObject(employee);
   } else {
-    await pimPage.removeEmployeeById("0888");
+    await pimPage.removeEmployeeById(employee.employeeId);
   }
 });
 

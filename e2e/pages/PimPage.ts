@@ -73,11 +73,6 @@ export class PimPage extends BasePage {
     const spinner = this.page.locator(".oxd-loading-spinner");
     await spinner.waitFor({ state: "hidden" });
 
-    // Wait until either table OR no-records appears
-    await Promise.race([
-      this.noRecordsFound.waitFor(),
-      this.page.locator(".oxd-table-body").waitFor(),
-    ]);
   }
 
   async isNoRecordsFoundVisible(): Promise<boolean> {
