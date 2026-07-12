@@ -2,7 +2,6 @@ import { test, expect } from "../fixtures/base.fixture";
 import { Env } from "../frameworkConfig/env";
 
 test("authenticate", async ({ page, loginPage }) => {
-
   // Navigate to login page
   await page.goto(Env.URL);
 

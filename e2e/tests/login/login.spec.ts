@@ -7,7 +7,7 @@ test("Login pass", async ({ page, loginPage }) => {
   await expect(page).toHaveURL(/dashboard/);
 });
 
-test("Login fail", async ({loginPage }) => {
+test("Login fail", async ({ loginPage }) => {
   await loginPage.goToLoginScreen();
   await loginPage.login("invalidUser", "invalidPass");
   await loginPage.expectInvalidCredentials();
