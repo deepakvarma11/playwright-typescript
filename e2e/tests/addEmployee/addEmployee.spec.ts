@@ -31,10 +31,8 @@ test("Verify no records found for invalid employee ID", async ({
   // Verify you're already logged in (optional but recommended)
   await expect(page).toHaveURL(/dashboard/);
 
-  // await pages.homePage.navigateToPIM();
   await homePage.navigateToPIM();
-
-  // await pages.pimPage.searchEmployeeById("999999");
+  
   await pimPage.searchEmployeeById("999999");
 
   await pimPage.isNoRecordsFoundVisible();
