@@ -2,7 +2,6 @@ import { test, expect } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
 
 test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
-
   // Navigate to your application
   await page.goto(Env.URL);
 
@@ -21,8 +20,11 @@ test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
   }
 });
 
-test("Verify no records found for invalid employee ID", async ({ page, homePage, pimPage }) => {
-
+test("Verify no records found for invalid employee ID", async ({
+  page,
+  homePage,
+  pimPage,
+}) => {
   // Navigate to your application
   await page.goto(Env.URL);
 
@@ -36,5 +38,4 @@ test("Verify no records found for invalid employee ID", async ({ page, homePage,
   await pimPage.searchEmployeeById("999999");
 
   await pimPage.isNoRecordsFoundVisible();
-
 });

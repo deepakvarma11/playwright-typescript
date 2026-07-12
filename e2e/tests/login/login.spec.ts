@@ -1,7 +1,7 @@
 import { expect, test } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
 
-test("Login pass", async ({ page , loginPage}) => {
+test("Login pass", async ({ page, loginPage }) => {
   // const pages = Pages(page);
   // const login = pages.loginPage;
   await loginPage.goToLoginScreen();
@@ -9,7 +9,7 @@ test("Login pass", async ({ page , loginPage}) => {
   await expect(page).toHaveURL(/dashboard/);
 });
 
-test("Login fail", async ({ page , loginPage}) => {
+test("Login fail", async ({ page, loginPage }) => {
   // const pages = Pages(page);
   // const login = pages.loginPage;
   await loginPage.goToLoginScreen();

@@ -1,8 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 
 export class BasePage {
-  constructor(protected page: Page) {
-  }
+  constructor(protected page: Page) {}
 
   async click(locator: Locator) {
     // await locator.waitFor({ state: "visible" });
@@ -28,7 +27,10 @@ export class BasePage {
     return await locator.isVisible();
   }
 
-  async isVisibleWithTimeout(locator: Locator, timeout: number): Promise<boolean> {
+  async isVisibleWithTimeout(
+    locator: Locator,
+    timeout: number,
+  ): Promise<boolean> {
     return await locator.isVisible({ timeout: timeout });
   }
 
@@ -53,14 +55,17 @@ export class BasePage {
   }
 
   async waitForURL(url: RegExp) {
-    await this.page.waitForURL(url, {timeout: 10000});
+    await this.page.waitForURL(url, { timeout: 10000 });
   }
 
   async goto(url: string) {
     await this.page.goto(url);
   }
 
-  async getReplaceLocator(selector: string, replaceValue: string): Promise<Locator> {
+  async getReplaceLocator(
+    selector: string,
+    replaceValue: string,
+  ): Promise<Locator> {
     return this.page.locator(selector.replace("$REPLACE", replaceValue));
   }
 }

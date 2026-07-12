@@ -58,12 +58,10 @@ export default defineConfig({
     {
       name: "chromium",
       dependencies: ["setup"],
-      testIgnore: [
-        /.*auth\.setup\.ts/,
-        /.*login\.spec\.ts/,],
+      testIgnore: [/.*auth\.setup\.ts/, /.*login\.spec\.ts/],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "playwright/.auth/user.json"
+        storageState: "playwright/.auth/user.json",
       },
     },
     {

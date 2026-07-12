@@ -3,8 +3,6 @@ import { BasePage } from "./BasePage";
 import { Env } from "../frameworkConfig/env";
 
 export class LoginPage extends BasePage {
-
-
   constructor(page: Page) {
     super(page);
   }
@@ -18,8 +16,9 @@ export class LoginPage extends BasePage {
   private readonly loginButton = this.page.getByRole("button", {
     name: "Login",
   });
-  private readonly loginError =
-    this.page.getByText("Invalid credentials", { exact: true });
+  private readonly loginError = this.page.getByText("Invalid credentials", {
+    exact: true,
+  });
 
   async goToLoginScreen() {
     await this.goto(Env.URL);

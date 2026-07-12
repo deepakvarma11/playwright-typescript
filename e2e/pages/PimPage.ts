@@ -3,7 +3,6 @@ import { BasePage } from "./BasePage";
 import { Locator } from "@playwright/test";
 
 export class PimPage extends BasePage {
-
   constructor(page: Page) {
     super(page);
   }
@@ -15,8 +14,9 @@ export class PimPage extends BasePage {
   private readonly searchButton = this.page.getByRole("button", {
     name: "Search",
   });
-  private readonly noRecordsFound =
-    this.page.locator('span').filter({ hasText: 'No Records Found' });
+  private readonly noRecordsFound = this.page
+    .locator("span")
+    .filter({ hasText: "No Records Found" });
 
   private readonly addEmployeeButton = this.page.getByRole("link", {
     name: "Add Employee",
@@ -53,7 +53,8 @@ export class PimPage extends BasePage {
     firstName: string,
     middleName: string,
     lastName: string,
-    employeeId: string) {
+    employeeId: string,
+  ) {
     await this.click(this.addEmployeeButton);
     await this.page.waitForLoadState("domcontentloaded");
     await this.waitForVisible(this.firstName);
@@ -79,10 +80,9 @@ export class PimPage extends BasePage {
     // Wait until either table OR no-records appears
     await Promise.race([
       this.noRecordsFound.waitFor(),
-      this.page.locator(".oxd-table-body").waitFor()
+      this.page.locator(".oxd-table-body").waitFor(),
     ]);
   }
-
 
   async isNoRecordsFoundVisible(): Promise<boolean> {
     return this.isVisible(this.noRecordsFound);

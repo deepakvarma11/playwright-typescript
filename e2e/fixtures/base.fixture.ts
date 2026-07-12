@@ -3,25 +3,24 @@ import { LoginPage } from "../pages/LoginPage";
 import { HomePage } from "../pages/HomePage";
 import { PimPage } from "../pages/PimPage";
 
-
 type PageFixtures = {
-    loginPage: LoginPage;
-    homePage: HomePage;
-    pimPage: PimPage;
-}
+  loginPage: LoginPage;
+  homePage: HomePage;
+  pimPage: PimPage;
+};
 
 export const test = base.extend<PageFixtures>({
-    loginPage: async ({ page }, use) => {
-        await use(new LoginPage(page));
-    },
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
+  },
 
-    homePage: async ({ page }, use) => {
-        await use(new HomePage(page));
-    },
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
+  },
 
-    pimPage: async ({ page }, use) => {
-        await use(new PimPage(page));
-    }
-})
+  pimPage: async ({ page }, use) => {
+    await use(new PimPage(page));
+  },
+});
 
 export { expect };
