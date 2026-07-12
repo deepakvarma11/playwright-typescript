@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 
 export class BasePage {
-  constructor(protected page: Page) {}
+  constructor(protected page: Page) { }
 
   async click(locator: Locator) {
     // await locator.waitFor({ state: "visible" });
@@ -35,7 +35,7 @@ export class BasePage {
   }
 
   async waitForVisible(locator: Locator) {
-    await locator.waitFor({ state: "visible", timeout: 5000 });
+    await locator.waitFor({ state: "visible", timeout: 10000 });
   }
 
   async waitForHidden(locator: Locator) {

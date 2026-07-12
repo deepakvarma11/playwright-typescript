@@ -1,20 +1,25 @@
+import { EmployeeFactory } from "../../factories/EmployeeFactory";
 import { test, expect } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
 
 test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
-  // Navigate to your application
-  await page.goto(Env.URL);
 
-  // Verify you're already logged in (optional but recommended)
-  await expect(page).toHaveURL(/dashboard/);
+  test.step("Navigate to URL", async () => {
+    await page.goto(Env.URL);
+    await expect(page).toHaveURL(/dashboard/);
+  })
 
-  await homePage.navigateToPIM();
+  test.step("Navigate to Pim Page", async () => {
+    await homePage.navigateToPIM();
+  })
 
   await pimPage.searchEmployeeById("0888");
-  console.log("No records found:", await pimPage.isNoRecordsFoundVisible());
+
+  const employee = EmployeeFactory.create();
+  console.log(employee);
 
   if (await pimPage.isNoRecordsFoundVisible()) {
-    await pimPage.addEmployee("firstname", "middelName", "lastName", "0888");
+    await pimPage.addEmployeeObject(employee);
   } else {
     await pimPage.removeEmployeeById("0888");
   }
@@ -25,15 +30,17 @@ test("Verify no records found for invalid employee ID", async ({
   homePage,
   pimPage,
 }) => {
-  // Navigate to your application
-  await page.goto(Env.URL);
 
-  // Verify you're already logged in (optional but recommended)
-  await expect(page).toHaveURL(/dashboard/);
+  test.step("Navigate to URL", async () => {
+    await page.goto(Env.URL);
+    await expect(page).toHaveURL(/dashboard/);
+  })
 
-  await homePage.navigateToPIM();
-  
+  test.step("Navigate to Pim Page", async () => {
+    await homePage.navigateToPIM();
+  })
+
+
   await pimPage.searchEmployeeById("999999");
-
-  await pimPage.isNoRecordsFoundVisible();
+  await pimPage.expectNoRecordsFoundVisible();
 });

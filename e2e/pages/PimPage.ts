@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Locator } from "@playwright/test";
+import { Employee } from "../models/Employee";
 
 export class PimPage extends BasePage {
   constructor(page: Page) {
@@ -49,25 +50,20 @@ export class PimPage extends BasePage {
     await this.click(this.addEmployeeButton);
   }
 
-  async addEmployee(
-    firstName: string,
-    middleName: string,
-    lastName: string,
-    employeeId: string,
-  ) {
+  async addEmployeeObject(employee: Employee) {
     await this.click(this.addEmployeeButton);
-    await this.page.waitForLoadState("domcontentloaded");
     await this.waitForVisible(this.firstName);
-    await this.fill(this.firstName, firstName);
-    await this.fill(this.middleName, middleName);
-    await this.fill(this.lastName, lastName);
+    await this.fill(this.firstName, employee.firstName);
+    await this.fill(this.middleName, employee.middleName);
+    await this.fill(this.lastName, employee.lastName);
     await this.click(this.employeeid);
-    await this.fill(this.employeeid, employeeId);
+    await this.fill(this.employeeid, employee.employeeId);
     await this.click(this.saveButton);
     await this.waitForURL(/viewPersonalDetails/);
   }
 
   async searchEmployeeById(employeeId: string) {
+    await this.page.waitForLoadState("domcontentloaded");
     await this.waitForVisible(this.employeeIdInput);
     await this.click(this.employeeIdInput);
     await this.fill(this.employeeIdInput, employeeId);
