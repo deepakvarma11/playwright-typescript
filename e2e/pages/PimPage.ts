@@ -45,7 +45,7 @@ export class PimPage extends BasePage {
 
   async navigateToEmployeeList() {
     await this.click(this.employeeList);
-    Logger.info("Navigated to Employee list")
+    Logger.info("Navigated to Employee list");
   }
 
   async clickAddEmployee() {
@@ -62,7 +62,7 @@ export class PimPage extends BasePage {
     await this.fill(this.employeeid, employee.employeeId);
     await this.click(this.saveButton);
     await this.waitForURL(/viewPersonalDetails/);
-    Logger.info(`Employee Added successfully: ${employee}`)
+    Logger.info(`Employee Added successfully: ${employee}`);
   }
 
   async searchEmployeeById(employeeId: string) {
@@ -100,7 +100,10 @@ export class PimPage extends BasePage {
 
   async removeEmployeeById(employeeId: string) {
     // await this.searchEmployeeById(employeeId);
-    const checkbox = await this.getReplaceLocator(this.employeeCheckbox, employeeId);
+    const checkbox = await this.getReplaceLocator(
+      this.employeeCheckbox,
+      employeeId,
+    );
     // await this.checkboxForEmployee(employeeId);
     await this.waitForVisible(checkbox);
     await this.click(checkbox);

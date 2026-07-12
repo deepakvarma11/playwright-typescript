@@ -2,7 +2,6 @@ import { test } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
 
 test.describe("Login testcases", async () => {
-  
   test("Login pass", async ({ loginPage, homePage }) => {
     await loginPage.goToLoginScreen();
     await loginPage.login(Env.LOGIN_USERNAME, Env.LOGIN_PASSWORD);
