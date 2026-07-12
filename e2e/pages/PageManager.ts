@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { PimPage } from "./pim.page";
-import { HomePage } from "./home.page";
-import { LoginPage } from "./login.page";
+import { PimPage } from "./PimPage";
+import { HomePage } from "./HomePage";
+import { LoginPage } from "./LoginPage";
 
 export const Pages = (page: Page) => {
   return {

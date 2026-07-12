@@ -1,8 +1,13 @@
-import { time } from "console";
-import { BasePage } from "./base.page";
+import { Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 import { Locator } from "@playwright/test";
 
 export class PimPage extends BasePage {
+
+  constructor(page: Page) {
+    super(page);
+  }
+
   private readonly employeeList = this.page.getByRole("link", {
     name: "Employee List",
   });
@@ -10,7 +15,9 @@ export class PimPage extends BasePage {
   private readonly searchButton = this.page.getByRole("button", {
     name: "Search",
   });
-  private readonly noRecordsFound = this.page.locator('span').filter({ hasText: 'No Records Found' });
+  private readonly noRecordsFound =
+    this.page.locator('span').filter({ hasText: 'No Records Found' });
+
   private readonly addEmployeeButton = this.page.getByRole("link", {
     name: "Add Employee",
   });
@@ -35,38 +42,59 @@ export class PimPage extends BasePage {
   });
 
   async navigateToEmployeeList() {
-    await this.employeeList.click();
+    await this.click(this.employeeList);
   }
 
   async clickAddEmployee() {
-    await this.addEmployeeButton.click();
+    await this.click(this.addEmployeeButton);
   }
 
-  async addEmployee() {
-    await this.addEmployeeButton.click();
+  async addEmployee(
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    employeeId: string) {
+    await this.click(this.addEmployeeButton);
     await this.page.waitForLoadState("domcontentloaded");
-    await this.firstName.waitFor({ state: "visible" , timeout: 5000});
-    await this.firstName.fill("iaydgfaid");
-    await this.middleName.fill("daikuhdai");
-    await this.lastName.fill("daskduh");
-    await this.employeeid.click();
-    await this.employeeid.fill("0888");
-    await this.saveButton.click();
-    await this.page.waitForURL(/viewPersonalDetails/, { timeout: 10000 }).catch(() => {});
+    await this.waitForVisible(this.firstName);
+    await this.fill(this.firstName, firstName);
+    await this.fill(this.middleName, middleName);
+    await this.fill(this.lastName, lastName);
+    await this.click(this.employeeid);
+    await this.fill(this.employeeid, employeeId);
+    await this.click(this.saveButton);
+    await this.waitForURL(/viewPersonalDetails/);
   }
 
   async searchEmployeeById(employeeId: string) {
-    await this.employeeIdInput.waitFor({ state: "visible" });
-    await this.employeeIdInput.click();
-    await this.employeeIdInput.fill(employeeId);
-    await this.searchButton.click();
-    // await this.searchButton.dblclick({ delay: 100 });
-    await this.page.waitForLoadState("domcontentloaded");
+    await this.waitForVisible(this.employeeIdInput);
+    await this.click(this.employeeIdInput);
+    await this.fill(this.employeeIdInput, employeeId);
+    await this.click(this.searchButton);
+
+    // Wait until loading spinner disappears
+    const spinner = this.page.locator(".oxd-loading-spinner");
+    await spinner.waitFor({ state: "hidden" });
+
+    // Wait until either table OR no-records appears
+    await Promise.race([
+      this.noRecordsFound.waitFor(),
+      this.page.locator(".oxd-table-body").waitFor()
+    ]);
   }
 
+
   async isNoRecordsFoundVisible(): Promise<boolean> {
-    await this.page.waitForTimeout(5000);
-    return await this.noRecordsFound.isVisible({ timeout: 5000 });
+    return this.isVisible(this.noRecordsFound);
+  }
+
+  async expectNoRecordsFoundVisible() {
+    await this.expectVisible(this.noRecordsFound);
+  }
+
+  async isEmployeePresent(employeeId: string): Promise<boolean> {
+    const checkbox = await this.checkboxForEmployee(employeeId);
+    return await checkbox.isVisible().catch(() => false);
   }
 
   private async checkboxForEmployee(employeeId: string): Promise<Locator> {
@@ -80,12 +108,12 @@ export class PimPage extends BasePage {
   }
 
   async removeEmployeeById(employeeId: string) {
-    await this.searchEmployeeById(employeeId);
+    // await this.searchEmployeeById(employeeId);
     const checkbox = await this.checkboxForEmployee(employeeId);
-    await checkbox.waitFor({ state: "visible" });
-    await checkbox.click();
-    await this.deleteButton.click();
-    await this.confirmDeleteButton.click();
+    await this.waitForVisible(checkbox);
+    await this.click(checkbox);
+    await this.click(this.deleteButton);
+    await this.click(this.confirmDeleteButton);
     await this.page
       .getByText("Info", { exact: true })
       .waitFor({ state: "visible" });

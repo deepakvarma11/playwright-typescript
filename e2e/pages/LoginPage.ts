@@ -1,9 +1,14 @@
 import { Page } from "@playwright/test";
-import { BasePage } from "./base.page";
-import { HomePage } from "./home.page";
+import { BasePage } from "./BasePage";
 import { Env } from "../frameworkConfig/env";
 
 export class LoginPage extends BasePage {
+
+
+  constructor(page: Page) {
+    super(page);
+  }
+
   private readonly usernameInput = this.page.getByRole("textbox", {
     name: "Username",
   });
@@ -13,21 +18,22 @@ export class LoginPage extends BasePage {
   private readonly loginButton = this.page.getByRole("button", {
     name: "Login",
   });
-  private readonly loginError = this.page.getByText("Invalid credentials");
+  private readonly loginError =
+    this.page.getByText("Invalid credentials", { exact: true });
 
   async goToLoginScreen() {
-    await this.gotoUrl(Env.URL);
+    await this.goto(Env.URL);
     await this.page.waitForLoadState("domcontentloaded");
   }
 
   async login(username: string, password: string) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-    await this.page.waitForURL(/dashboard/, { timeout: 10000 }).catch(() => {});
+    await this.fill(this.usernameInput, username);
+    await this.fill(this.passwordInput, password);
+    await this.click(this.loginButton);
+    // await this.page.waitForURL(/dashboard/, { timeout: 10000 }).catch(() => { });
   }
 
-  async isLoginErrorVisible(): Promise<boolean> {
-    return await this.loginError.isVisible({ timeout: 5000 });
+  async expectInvalidCredentials() {
+    await this.expectVisible(this.loginError);
   }
 }

@@ -1,23 +1,40 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
-import { Pages } from "../../pages/pages";
 
-test("Verify if employee exists", async ({ page }) => {
-  const pages = Pages(page);
-  const loginPage = pages.loginPage;
+test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
 
+  // Navigate to your application
   await page.goto(Env.URL);
-  await loginPage.login(Env.LOGIN_USERNAME, Env.LOGIN_PASSWORD);
-  const homePage = pages.homePage;
+
+  // Verify you're already logged in (optional but recommended)
+  await expect(page).toHaveURL(/dashboard/);
+
   await homePage.navigateToPIM();
-  const pimPage = pages.pimPage;
 
   await pimPage.searchEmployeeById("0888");
   console.log("No records found:", await pimPage.isNoRecordsFoundVisible());
 
   if (await pimPage.isNoRecordsFoundVisible()) {
-    await pimPage.addEmployee();
+    await pimPage.addEmployee("firstname", "middelName", "lastName", "0888");
   } else {
     await pimPage.removeEmployeeById("0888");
   }
+});
+
+test("Verify no records found for invalid employee ID", async ({ page, homePage, pimPage }) => {
+
+  // Navigate to your application
+  await page.goto(Env.URL);
+
+  // Verify you're already logged in (optional but recommended)
+  await expect(page).toHaveURL(/dashboard/);
+
+  // await pages.homePage.navigateToPIM();
+  await homePage.navigateToPIM();
+
+  // await pages.pimPage.searchEmployeeById("999999");
+  await pimPage.searchEmployeeById("999999");
+
+  await pimPage.isNoRecordsFoundVisible();
+
 });

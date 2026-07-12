@@ -23,7 +23,7 @@ if (process.env.ENVIRONMENT) {
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: "./e2e/tests/addEmployee",
+  testDir: "./e2e",
   /* Run tests in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -52,8 +52,26 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: "setup",
+      testMatch: /.*auth\.setup\.ts/,
+    },
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup"],
+      testIgnore: [
+        /.*auth\.setup\.ts/,
+        /.*login\.spec\.ts/,],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/user.json"
+      },
+    },
+    {
+      name: "login",
+      testMatch: /.*login\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+      },
     },
 
     // {
