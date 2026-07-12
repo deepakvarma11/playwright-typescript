@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Locator } from "@playwright/test";
 import { Employee } from "../models/Employee";
+import { Logger } from "../utils/Logger";
 
 export class PimPage extends BasePage {
   constructor(page: Page) {
@@ -44,6 +45,7 @@ export class PimPage extends BasePage {
 
   async navigateToEmployeeList() {
     await this.click(this.employeeList);
+    Logger.info("Navigated to Employee list")
   }
 
   async clickAddEmployee() {
@@ -60,6 +62,7 @@ export class PimPage extends BasePage {
     await this.fill(this.employeeid, employee.employeeId);
     await this.click(this.saveButton);
     await this.waitForURL(/viewPersonalDetails/);
+    Logger.info(`Employee Added successfully: ${employee}`)
   }
 
   async searchEmployeeById(employeeId: string) {
@@ -72,14 +75,13 @@ export class PimPage extends BasePage {
     // Wait until loading spinner disappears
     const spinner = this.page.locator(".oxd-loading-spinner");
     await spinner.waitFor({ state: "hidden" });
-
   }
 
-  async isNoRecordsFoundVisible(): Promise<boolean> {
+  async isNoEmployeeExists(): Promise<boolean> {
     return this.isVisible(this.noRecordsFound);
   }
 
-  async expectNoRecordsFoundVisible() {
+  async expectNoEmployeeExists() {
     await this.expectVisible(this.noRecordsFound);
   }
 
@@ -93,14 +95,13 @@ export class PimPage extends BasePage {
       this.employeeCheckbox,
       employeeId,
     );
-    // const chckBox = this.employeeCheckbox.replace('$EMPLOYEEID', employeeId);
-    // const xpath = `//div[normalize-space(text())='${employeeId}']/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
     return chckBox;
   }
 
   async removeEmployeeById(employeeId: string) {
     // await this.searchEmployeeById(employeeId);
-    const checkbox = await this.checkboxForEmployee(employeeId);
+    const checkbox = await this.getReplaceLocator(this.employeeCheckbox, employeeId);
+    // await this.checkboxForEmployee(employeeId);
     await this.waitForVisible(checkbox);
     await this.click(checkbox);
     await this.click(this.deleteButton);
@@ -108,5 +109,7 @@ export class PimPage extends BasePage {
     await this.page
       .getByText("Info", { exact: true })
       .waitFor({ state: "visible" });
+
+    Logger.success("Employee Deleted Successfully : ${employeeId}");
   }
 }

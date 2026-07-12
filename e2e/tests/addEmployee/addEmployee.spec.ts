@@ -1,43 +1,33 @@
 import { EmployeeFactory } from "../../factories/EmployeeFactory";
-import { test, expect } from "../../fixtures/base.fixture";
-import { Env } from "../../frameworkConfig/env";
+import { test } from "../../fixtures/base.fixture";
 
-test("Verify if employee exists", async ({ page, homePage, pimPage }) => {
+test.beforeEach("Login to the Application", async ({ homePage }) => {
   test.step("Navigate to URL", async () => {
-    await page.goto(Env.URL);
-    await expect(page).toHaveURL(/dashboard/);
+    await homePage.navigateToDashBoard();
+    await homePage.expectDashboardPage();
   });
 
   test.step("Navigate to Pim Page", async () => {
     await homePage.navigateToPIM();
   });
+})
 
-  const employee = EmployeeFactory.create();
-  console.log(employee);
+test("Verify employee exists and if exists delete the employee",
+  async ({ pimPage }) => {
 
-  await pimPage.searchEmployeeById(employee.employeeId);
+    const employee = EmployeeFactory.create();
+    await pimPage.searchEmployeeById(employee.employeeId);
 
-  if (await pimPage.isNoRecordsFoundVisible()) {
-    await pimPage.addEmployeeObject(employee);
-  } else {
-    await pimPage.removeEmployeeById(employee.employeeId);
-  }
-});
+    if (await pimPage.isNoEmployeeExists()) {
+      await pimPage.addEmployeeObject(employee);
+    } else {
+      await pimPage.removeEmployeeById(employee.employeeId);
+    }
+  });
 
-test("Verify no records found for invalid employee ID", async ({
-  page,
-  homePage,
+test("Verify no employee exists for invalid employee ID", async ({
   pimPage,
 }) => {
-  test.step("Navigate to URL", async () => {
-    await page.goto(Env.URL);
-    await expect(page).toHaveURL(/dashboard/);
-  });
-
-  test.step("Navigate to Pim Page", async () => {
-    await homePage.navigateToPIM();
-  });
-
   await pimPage.searchEmployeeById("999999");
-  await pimPage.expectNoRecordsFoundVisible();
+  await pimPage.expectNoEmployeeExists();
 });

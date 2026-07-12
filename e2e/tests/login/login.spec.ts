@@ -1,13 +1,12 @@
-import { expect, test } from "../../fixtures/base.fixture";
+import { test } from "../../fixtures/base.fixture";
 import { Env } from "../../frameworkConfig/env";
 
-
 test.describe("Login testcases", async () => {
-
-  test("Login pass", async ({ page, loginPage }) => {
+  
+  test("Login pass", async ({ loginPage, homePage }) => {
     await loginPage.goToLoginScreen();
     await loginPage.login(Env.LOGIN_USERNAME, Env.LOGIN_PASSWORD);
-    await expect(page).toHaveURL(/dashboard/);
+    await homePage.expectDashboardPage();
   });
 
   test("Login invalid username", async ({ loginPage }) => {
@@ -21,6 +20,4 @@ test.describe("Login testcases", async () => {
     await loginPage.login(Env.LOGIN_USERNAME, "invalidPass");
     await loginPage.expectInvalidCredentials();
   });
-})
-
-
+});

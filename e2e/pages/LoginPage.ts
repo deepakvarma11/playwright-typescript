@@ -29,7 +29,6 @@ export class LoginPage extends BasePage {
     await this.fill(this.usernameInput, username);
     await this.fill(this.passwordInput, password);
     await this.click(this.loginButton);
-    // await this.page.waitForURL(/dashboard/, { timeout: 10000 }).catch(() => { });
   }
 
   async expectInvalidCredentials() {
