@@ -2,12 +2,12 @@ import { EmployeeFactory } from "../../factories/EmployeeFactory";
 import { test } from "../../fixtures/base.fixture";
 
 test.beforeEach("Login to the Application", async ({ homePage }) => {
-  test.step("Navigate to URL", async () => {
+  await test.step("Navigate to URL", async () => {
     await homePage.navigateToDashBoard();
     await homePage.expectDashboardPage();
   });
 
-  test.step("Navigate to Pim Page", async () => {
+  await test.step("Navigate to Pim Page", async () => {
     await homePage.navigateToPIM();
   });
 });

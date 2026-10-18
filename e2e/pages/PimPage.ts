@@ -17,8 +17,8 @@ export class PimPage extends BasePage {
     name: "Search",
   });
   private readonly noRecordsFound = this.page
-    .locator("span")
-    .filter({ hasText: "No Records Found" });
+    .getByText("No Records Found", { exact: true })
+    .first();
 
   private readonly addEmployeeButton = this.page.getByRole("link", {
     name: "Add Employee",
@@ -37,7 +37,6 @@ export class PimPage extends BasePage {
   private readonly saveButton = this.page.getByRole("button", { name: "Save" });
   private readonly successMessage = this.page.getByText(/Successfully Saved/i);
 
-  private readonly employeeCheckbox = `//div[normalize-space(text())='$REPLACE']/ancestor::div[contains(@class,'oxd-table-row')]//div[contains(@class,'oxd-checkbox-wrapper')]`;
   private readonly deleteButton = this.page.getByRole("button", { name: "" });
   private readonly confirmDeleteButton = this.page.getByRole("button", {
     name: " Yes, Delete",
@@ -72,9 +71,8 @@ export class PimPage extends BasePage {
     await this.fill(this.employeeIdInput, employeeId);
     await this.click(this.searchButton);
 
-    // Wait until loading spinner disappears
-    const spinner = this.page.locator(".oxd-loading-spinner");
-    await spinner.waitFor({ state: "hidden" });
+    const employeeRow = this.employeeRowForId(employeeId);
+    await employeeRow.or(this.noRecordsFound).waitFor({ state: "visible" });
   }
 
   async isNoEmployeeExists(): Promise<boolean> {
@@ -86,25 +84,19 @@ export class PimPage extends BasePage {
   }
 
   async isEmployeePresent(employeeId: string): Promise<boolean> {
-    const checkbox = await this.checkboxForEmployee(employeeId);
-    return await checkbox.isVisible().catch(() => false);
+    return await this.employeeRowForId(employeeId).isVisible();
   }
 
-  private async checkboxForEmployee(employeeId: string): Promise<Locator> {
-    const chckBox = await this.getReplaceLocator(
-      this.employeeCheckbox,
-      employeeId,
-    );
-    return chckBox;
+  private employeeRowForId(employeeId: string): Locator {
+    return this.page
+      .locator(".oxd-table-row")
+      .filter({ has: this.page.getByText(employeeId, { exact: true }) });
   }
 
   async removeEmployeeById(employeeId: string) {
-    // await this.searchEmployeeById(employeeId);
-    const checkbox = await this.getReplaceLocator(
-      this.employeeCheckbox,
-      employeeId,
+    const checkbox = this.employeeRowForId(employeeId).locator(
+      ".oxd-checkbox-wrapper",
     );
-    // await this.checkboxForEmployee(employeeId);
     await this.waitForVisible(checkbox);
     await this.click(checkbox);
     await this.click(this.deleteButton);
